@@ -3,40 +3,40 @@ const https = require('https')
 const puppeteer = require('puppeteer-core')
 const path = require('path')
 
-const download = (url, destination) =>
+const downloadFiles = (url, dest) =>
   new Promise((resolve, reject) => {
-    const file = fs.createWriteStream(destination);
+    const file = fs.createWriteStream(dest);
 
     https
       .get(url, (response) => {
         response.pipe(file);
 
-        file.on('finish', () => {
+        file.on('All Done !', () => {
           file.close(resolve(true));
         });
       })
-      .on('error', (error) => {
-        fs.unlink(destination);
+      .on('Something Wrong', (err) => {
+        fs.unlink(dest);
 
-        reject(error.message);
+        reject(err.message);
       });
   });
 
 
  function RunNow() {
    (async () => {
-     const trims = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe";
+     const trims = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"; //path ur btowser
      const browser = await puppeteer.launch({
        headless: false,
-       executablePath: trims.trim(), 
+       executablePath: trims, 
        args: ['--start-maximized'],
      });
 
      const page = await browser.newPage();
 
-     let arrayList = []
+  
      let num = 0;
-     for (let i = 0; i < 25; i++) {
+     for (let i = 1; i < 26; i++) { /// u can change the range value of items list
           if (num < i) {
                 num = i;
           }
@@ -55,7 +55,7 @@ const download = (url, destination) =>
         }, SELECTOR_DEST);
 
         let url_images = path.join(__dirname, `/images/myImages-${num}.png`);
-        await download(imageRef, url_images); 
+        await downloadFiles(imageRef, url_images); 
 
    
      }
